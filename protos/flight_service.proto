@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package flight;
+
+service UserService {
+  rpc CheckUser (CheckUserRequest) returns (CheckUserResponse) {}
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+}
+
+message CheckUserRequest {
+  string email = 1;
+}
+
+message CheckUserResponse {
+  bool exists = 1;
+}
+
+message GetUserRequest {
+  string email = 1;
+}
+
+message GetUserResponse {
+  string email = 1;
+  string name = 2;
+  string surname = 3;
+  string fiscal_code = 4;
+  string bank_info = 5;
+  bool found = 6;
+}
+

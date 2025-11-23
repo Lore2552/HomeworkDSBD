@@ -4,34 +4,48 @@ services:
   postgres:
     image: postgres:15
     container_name: postgres
+    restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: userdb
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   user-manager:
-    build: ./user-manager
+    build:
+      context: .
+      dockerfile: user-manager/Dockerfile
     container_name: user-manager
+    restart: always
     ports:
       - "5000:5000"
+      - "50051:50051"
     depends_on:
       - postgres
     environment:
       DATABASE_URL: postgresql://user:password@postgres:5432/userdb
     volumes:
       - ./user-manager:/app
+      - ./protos:/app/protos
 
   data-collector:
-    build: ./data-collector
+    build:
+      context: .
+      dockerfile: data-collector/Dockerfile
     container_name: data-collector
+    restart: always
     ports:
       - "5001:5001"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/datadb
     volumes:
       - ./data-collector:/app
+      - ./protos:/app/protos
 
 volumes:
   postgres_data:

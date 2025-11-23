@@ -2,9 +2,12 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY user-manager/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY user-manager/ .
+COPY protos/ ./protos/
 
-CMD ["python", "userApp.py"]
+RUN python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/flight_service.proto
+
+CMD ["sh", "-c", "python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/flight_service.proto && python userApp.py"]
