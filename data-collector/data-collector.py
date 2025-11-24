@@ -2,7 +2,7 @@ import os
 import time
 import threading
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import Counter
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -48,6 +48,23 @@ class Flight(db.Model):
     last_seen = db.Column(db.Integer)
     airport_monitored = db.Column(db.String(10))
     direction = db.Column(db.String(10))  # 'arrival' or 'departure'
+
+
+def _flight_to_dict(flight):
+    if not flight:
+        return None
+    return {
+        "id": flight.id,
+        "icao24": flight.icao24,
+        "callsign": flight.callsign,
+        "est_departure_airport": flight.est_departure_airport,
+        "est_arrival_airport": flight.est_arrival_airport,
+        "first_seen": flight.first_seen,
+        "last_seen": flight.last_seen,
+        "airport_monitored": flight.airport_monitored,
+        "direction": flight.direction,
+    }
+
 
 class TokenManager:
     def __init__(self, token_url, client_id, client_secret):
@@ -275,7 +292,7 @@ def get_busiest_hour(airport_code):
         return jsonify({"message": "No flights found for this airport"}), 404
 
     # Extract hour from timestamp (UTC)
-    hours = [datetime.fromtimestamp(f[0], tz=datetime.UTC).hour for f in flights]
+    hours = [datetime.fromtimestamp(f[0], tz=timezone.utc).hour for f in flights]
     
     hour_counts = Counter(hours)
     
