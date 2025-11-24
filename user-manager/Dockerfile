@@ -8,6 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY user-manager/ .
 COPY protos/ ./protos/
 
-RUN python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/flight_service.proto
+RUN python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/user_manager.proto
 
-CMD ["sh", "-c", "python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/flight_service.proto && python userApp.py"]
+CMD ["sh", "-c", "python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/user_manager.proto && python user-manager.py"]

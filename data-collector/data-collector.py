@@ -8,8 +8,8 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import grpc
-import flight_service_pb2
-import flight_service_pb2_grpc
+import user_manager_pb2
+import user_manager_pb2_grpc
 
 app = Flask(__name__)
 
@@ -23,8 +23,7 @@ db = SQLAlchemy(app)
 
 CLIENT_ID = os.getenv("CLIENT_ID", "lore25-api-client")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "FozpkBoBcLEhsFcEZNh1ySEGmsb7bYbJ")
-OPENSKY_USERNAME = os.getenv("OPENSKY_USERNAME")
-OPENSKY_PASSWORD = os.getenv("OPENSKY_PASSWORD")
+
 
 TOKEN_URL = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token"
 
@@ -50,6 +49,50 @@ class Flight(db.Model):
     airport_monitored = db.Column(db.String(10))
     direction = db.Column(db.String(10))  # 'arrival' or 'departure'
 
+class TokenManager:
+    def __init__(self, token_url, client_id, client_secret):
+        self.token_url = token_url
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self._access_token = None
+        self._expiry_ts = 0
+        self._lock = threading.Lock()
+        # ssecondi
+        self._margin = 30
+
+    #metodo privato!
+    def _request_new_token(self):
+        payload = {
+            "grant_type": "client_credentials",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        resp = requests.post(self.token_url, data=payload, headers=headers, timeout=10)
+        if resp.status_code != 200:
+            raise RuntimeError(f"Token endpoint error: {resp.status_code} {resp.text}")
+        data = resp.json()
+        token = data.get("access_token")
+        expires_in = data.get("expires_in", 300)  # fallback se manca il campo
+        if not token:
+            raise RuntimeError("Token endpoint did not return access_token")
+        expiry_ts = int(time.time()) + int(expires_in)
+        return token, expiry_ts
+
+    def get_token(self):
+        with self._lock:
+            now = int(time.time())
+            # se token valido e non vicino alla scadenza, lo riuso
+            if self._access_token and (self._expiry_ts - now) > self._margin:
+                return self._access_token
+            # altrimenti richiedo un nuovo token e aggiorno cache
+            token, expiry_ts = self._request_new_token()
+            self._access_token = token
+            self._expiry_ts = expiry_ts
+            return self._access_token
+
+# istanza globale
+token_manager = TokenManager(TOKEN_URL, CLIENT_ID, CLIENT_SECRET)
 
 @app.route("/register_airports", methods=["POST"])
 def register_airports():
@@ -66,8 +109,8 @@ def register_airports():
     # Check if user exists via gRPC
     try:
         with grpc.insecure_channel("user-manager:50051") as channel:
-            stub = flight_service_pb2_grpc.UserServiceStub(channel)
-            response = stub.CheckUser(flight_service_pb2.CheckUserRequest(email=email))
+            stub = user_manager_pb2_grpc.UserServiceStub(channel)
+            response = stub.CheckUser(user_manager_pb2.CheckUserRequest(email=email))
             
             if not response.exists:
                 return {"error": "User not found in User Manager"}, 404
@@ -101,8 +144,8 @@ def get_user_info(email):
     user_data = {}
     try:
         with grpc.insecure_channel("user-manager:50051") as channel:
-            stub = flight_service_pb2_grpc.UserServiceStub(channel)
-            response = stub.GetUser(flight_service_pb2.GetUserRequest(email=email))
+            stub = user_manager_pb2_grpc.UserServiceStub(channel)
+            response = stub.GetUser(user_manager_pb2.GetUserRequest(email=email))
             
             if response.found:
                 user_data = {
@@ -129,51 +172,37 @@ def get_user_info(email):
     
     return jsonify(result), 200
 
-
-def get_access_token():
-    payload = {
-        "grant_type": "client_credentials",
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-    }
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    response = requests.post(TOKEN_URL, data=payload, headers=headers)
-    if response.status_code != 200:
-        return None
-    return response.json().get("access_token")
-
-
+#usiamola solo per debug e poi eliminiamo questo endopoint quando consegniamo il progetto 
 @app.route("/get_token", methods=["GET"])
 def get_token_route():
-    token = get_access_token()
-    if not token:
-        return jsonify({"error": "Failed to get token"}), 400
-    return jsonify({"access_token": token})
-
-
-@app.route("/states/all", methods=["GET"])
-def get_all_states():
     try:
-        token = get_access_token()
-        if not token:
-            return jsonify({"error": "Failed to get token"}), 400
-
-        headers = {"Authorization": f"Bearer {token}"}
-        OPENSKY_STATES_URL = "https://opensky-network.org/api/states/all"
-        response = requests.get(OPENSKY_STATES_URL, headers=headers)
-
-        if response.status_code != 200:
-            return (
-                jsonify(
-                    {"error": "Failed to fetch OpenSky data", "details": response.text}
-                ),
-                response.status_code,
-            )
-
-        return jsonify(response.json())
-
+        token = token_manager.get_token()
+        return jsonify({"access_token": token}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+#eliminiamo quando consegniamo il progetto, era una prova
+@app.route("/states/all", methods=["GET"])
+def get_all_states():
+    token = None
+    try:
+        token = token_manager.get_token()
+    except Exception as e:
+        return jsonify({"error": f"Failed to get token: {e}"}), 400
+
+    headers = {"Authorization": f"Bearer {token}"}
+    OPENSKY_STATES_URL = "https://opensky-network.org/api/states/all"
+    response = requests.get(OPENSKY_STATES_URL, headers=headers)
+
+    if response.status_code != 200:
+        return (
+            jsonify(
+                {"error": "Failed to fetch OpenSky data", "details": response.text}
+            ),
+            response.status_code,
+        )
+
+    return jsonify(response.json()), 200
 
 
 @app.route("/flights", methods=["GET"])
@@ -246,7 +275,7 @@ def get_busiest_hour(airport_code):
         return jsonify({"message": "No flights found for this airport"}), 404
 
     # Extract hour from timestamp (UTC)
-    hours = [datetime.utcfromtimestamp(f[0]).hour for f in flights]
+    hours = [datetime.fromtimestamp(f[0], tz=datetime.UTC).hour for f in flights]
     
     hour_counts = Counter(hours)
     
@@ -263,17 +292,7 @@ def get_busiest_hour(airport_code):
     }), 200
 
 
-def _flight_to_dict(f):
-    return {
-        "icao24": f.icao24,
-        "callsign": f.callsign,
-        "est_departure_airport": f.est_departure_airport,
-        "est_arrival_airport": f.est_arrival_airport,
-        "first_seen": f.first_seen,
-        "last_seen": f.last_seen,
-        "airport_monitored": f.airport_monitored,
-        "direction": f.direction
-    }
+
 
 
 @app.route("/collect_flights", methods=["POST"])
@@ -306,18 +325,15 @@ def collect_flights(target_airports=None):
     # Auth logic: Prefer Basic Auth if vars are set, else try Token
     auth = None
     headers = {}
-    
-    if OPENSKY_USERNAME and OPENSKY_PASSWORD:
-        print("Using Basic Auth for OpenSky")
-        auth = (OPENSKY_USERNAME, OPENSKY_PASSWORD)
-    else:
-        print("Using OAuth Token for OpenSky")
-        token = get_access_token()
-        if token:
-            headers = {"Authorization": f"Bearer {token}"}
-        else:
-            stats["errors"].append("No auth available (Token failed and no Basic Auth creds). Proceeding anonymously.")
+    token = None
 
+    try:
+        token = token_manager.get_token()
+    except Exception as e:
+        return jsonify({"error": f"Failed to get token: {e}"}), 400
+    
+    if token:
+        headers = {"Authorization": f"Bearer {token}"}
     # Time window: End 2 hours ago to ensure data availability (OpenSky delay)
     # and cover the last 12 hours from that point.
     end_time = int(time.time()) - 7200 

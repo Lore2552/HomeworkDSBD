@@ -1,12 +1,11 @@
 import os
-import time
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import grpc
 from concurrent import futures
 import threading
-import flight_service_pb2
-import flight_service_pb2_grpc
+import user_manager_pb2
+import user_manager_pb2_grpc
 
 
 app = Flask(__name__)
@@ -28,27 +27,18 @@ class User(db.Model):
     fiscal_code = db.Column(db.String(16), nullable=True)
     bank_info = db.Column(db.String(200), nullable=True)
 
-    def to_dict(self):
-        return {
-            "email": self.email,
-            "name": self.name,
-            "surname": self.surname,
-            "fiscal_code": self.fiscal_code,
-            "bank_info": self.bank_info,
-        }
 
-
-class UserService(flight_service_pb2_grpc.UserServiceServicer):
+class UserService(user_manager_pb2_grpc.UserServiceServicer):
     def CheckUser(self, request, context):
         with app.app_context():
             user = db.session.get(User, request.email)
-            return flight_service_pb2.CheckUserResponse(exists=bool(user))
+            return user_manager_pb2.CheckUserResponse(exists=bool(user))
 
     def GetUser(self, request, context):
         with app.app_context():
             user = db.session.get(User, request.email)
             if user:
-                return flight_service_pb2.GetUserResponse(
+                return user_manager_pb2.GetUserResponse(
                     email=user.email,
                     name=user.name,
                     surname=user.surname,
@@ -57,19 +47,19 @@ class UserService(flight_service_pb2_grpc.UserServiceServicer):
                     found=True
                 )
             else:
-                return flight_service_pb2.GetUserResponse(found=False)
+                return user_manager_pb2.GetUserResponse(found=False)
 
 
 def serve_grpc():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    flight_service_pb2_grpc.add_UserServiceServicer_to_server(UserService(), server)
+    user_manager_pb2_grpc.add_UserServiceServicer_to_server(UserService(), server)
     server.add_insecure_port("[::]:50051")
     print("gRPC server started on port 50051")
     server.start()
     server.wait_for_termination()
 
 
-@app.route("/users", methods=["POST"])
+@app.route("/addUser", methods=["POST"])
 def add_user():
     data = request.json
     if not data:
