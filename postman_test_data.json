@@ -26,14 +26,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/users",
+					"raw": "http://localhost:5000/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"users"
+						"addUser"
 					]
 				}
 			},
@@ -45,7 +45,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/users",
+				"raw": "http://localhost:5000/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -224,14 +224,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/users",
+					"raw": "http://localhost:5000/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"users"
+						"addUser"
 					]
 				}
 			},

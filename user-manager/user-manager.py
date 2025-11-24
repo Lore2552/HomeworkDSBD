@@ -27,6 +27,14 @@ class User(db.Model):
     fiscal_code = db.Column(db.String(16), nullable=True)
     bank_info = db.Column(db.String(200), nullable=True)
 
+    def to_dict(self):
+        return {
+            "email": self.email,
+            "name": self.name,
+            "surname": self.surname,
+            "fiscal_code": self.fiscal_code,
+            "bank_info": self.bank_info,
+        }
 
 class UserService(user_manager_pb2_grpc.UserServiceServicer):
     def CheckUser(self, request, context):
