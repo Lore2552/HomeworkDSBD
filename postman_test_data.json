@@ -339,6 +339,74 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add User (Giovanni - Duplicate Prefs Test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Airports (Giovanni) - Duplicate LIRF/LIMC",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"airports\": [\"LIRF\", \"LIMC\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/register_airports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"register_airports"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
