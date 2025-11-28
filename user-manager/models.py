@@ -17,3 +17,12 @@ class User(db.Model):
             "fiscal_code": self.fiscal_code,
             "bank_info": self.bank_info,
         }
+
+
+class MessageId(db.Model):
+    __tablename__ = "message_ids"
+
+    id = db.Column(db.String(36), primary_key=True)  # UUID format
+
+    def to_dict(self):
+        return {"id": self.id}

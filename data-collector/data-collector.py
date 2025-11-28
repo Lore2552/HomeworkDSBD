@@ -5,6 +5,8 @@ from flask import Flask
 from database import db
 from routes import api_bp
 from services import collect_flights
+from grpc_service import serve_grpc
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 
@@ -16,20 +18,23 @@ db.init_app(app)
 
 app.register_blueprint(api_bp)
 
-def start_scheduler():
-    while True:
-        with app.app_context():
-            collect_flights()
-        # Sleep for 12 hours
-        time.sleep(12 * 3600)
+def run_scheduled_flights():
+    with app.app_context():
+        print("Inizio raccolta voli schedulata...")
+        collect_flights()
+        print("Raccolta voli completata.")
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    
+    scheduler = BackgroundScheduler(daemon = True)
     # Start background scheduler
-    scheduler_thread = threading.Thread(target=start_scheduler)
-    scheduler_thread.daemon = True
-    scheduler_thread.start()
+    scheduler.add_job(func=run_scheduled_flights, trigger="interval", hours=12)
+    scheduler.start()
+
+    # Start gRPC server
+    grpc_thread = threading.Thread(target=serve_grpc, args=(app,))
+    grpc_thread.daemon = True
+    grpc_thread.start()
 
     app.run(host="0.0.0.0", port=5001)

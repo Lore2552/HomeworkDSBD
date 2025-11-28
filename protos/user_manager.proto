@@ -28,3 +28,27 @@ message GetUserResponse {
   bool found = 6;
 }
 
+service CollectorService {
+  rpc CleanupUser (CleanupUserRequest) returns (CleanupUserResponse) {}
+  rpc RemoveAirportInterest (RemoveAirportInterestRequest) returns (RemoveAirportInterestResponse) {}
+}
+
+message CleanupUserRequest {
+  string email = 1;
+}
+
+message CleanupUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message RemoveAirportInterestRequest {
+  string email = 1;
+  string airport_code = 2;
+}
+
+message RemoveAirportInterestResponse {
+  bool success = 1;
+  string message = 2;
+}
+

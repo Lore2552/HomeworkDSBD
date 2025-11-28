@@ -39,6 +39,7 @@ services:
     restart: always
     ports:
       - "5001:5001"
+      - "50052:50052"
     depends_on:
       - postgres
     environment:

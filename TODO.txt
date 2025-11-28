@@ -6,24 +6,33 @@ Inoltre, get-flights() viene chiamata: o in maniera "forzata" (per debug), o in 
 
 -da fare: rendi più modulare il codice
 
+
+
+HO AGGIUNTO CHE SI ELIMINANO GLI INTERESSI QUANDO RIMUOVI UN UTENTE TESTALO
 COSE DA AGGIUSTARE:
 
-1. Trikki aeroporto (vedi mess importante)
-2. ⁠At most once (vedi registrazione)
+1. (FATTO) Trikki aeroporto (vedi mess importante)
+2. ⁠At most once (vedi registrazione) (FATTO)
 3. ⁠Documentazione
-4. ⁠Un utente puo togliere gli interessi
-5. ⁠abbissare versioni in requirements.txt
-6. da controllare meglio la creazione del server grpc
-7. aggiungere più errori per duplicazione eventuale di iban o codice fiscale(tipo cod fiscale già registrato o iban già registrato)
-8. Controllare creazione e gestione dei thread (tipo per richiedere gli areoporti, se abbiamo + thread è meglio per ogni richiesta)
-9. Vedere meglio cosa restituisce l'api perchè volendo si può far restituire solo alcune informazioni utili e non tutte quelle che stampiamo noi
-10. Fare meglio i filtri delle query per averli più puliti
-11. aggiungere richiesta http per restituire aereoporti per ICAO e il loro conto (pre vedere se effettivamente li prende tutti)
-12. volendo, al posto di fare un while true, possiamo usare uno scheduler che ogni 12 ore avvia la raccolta dati
-13. Chiedere a morana se il grpc channel va fatto bilaterale
-14. Chiedere se è meglio fare due container o due db separati
-15. aggiustare il fatto che abbiamo 10 thread forse non ha senso ed è inefficiente
-16. aggiungere il fatto che se un utente viene eliminato si eliminano gli interessi e viene ripopolato il db dei voli (forse)
-17. Mettere i thread daemon (che si cancellano da soli appena finiscono o chiudi)
-18. Fare meglio le query sql (db.execute,db.select ecc)
-19. Fare classi per rendere il codice modulare (tipo la richiesta del token)
+4. (FATTO) ⁠Un utente puo togliere gli interessi
+5. (FATTO) ⁠abbissare versioni in requirements.txt
+6. (FATTO) da controllare meglio la creazione del server grpc
+7. (FATTO) aggiungere più errori per duplicazione eventuale di iban o codice fiscale(tipo cod fiscale già registrato o iban già registrato)
+8. (FATTO) Controllare creazione e gestione dei thread (tipo per richiedere gli areoporti, se abbiamo + thread è meglio per ogni richiesta)
+9. (FATTO) Vedere meglio cosa restituisce l'api perchè volendo si può far restituire solo alcune informazioni utili e non tutte quelle che stampiamo noi
+10. (FATTO) Fare meglio i filtri delle query per averli più puliti
+11. (FATTO) aggiungere richiesta http per restituire aereoporti per ICAO e il loro conto (pre vedere se effettivamente li prende tutti)
+12. (FATTO) volendo, al posto di fare un while true, possiamo usare uno scheduler che ogni 12 ore avvia la raccolta dati
+13. (FATTO) Chiedere a morana se il grpc channel va fatto bilaterale
+14. (FATTO) Chiedere se è meglio fare due container o due db separati
+16. (FATTO) aggiungere il fatto che se un utente viene eliminato si eliminano gli interessi e viene ripopolato il db dei voli (forse)
+17. (FATTO) Mettere i thread daemon (che si cancellano da soli appena finiscono o chiudi) (FATTO)
+18. (FATTO) Fare meglio le query sql (db.execute,db.select ecc)
+19. (FATTO) Fare classi per rendere il codice modulare (tipo la richiesta del token) (FATTO)
+20. (FATTO) inserire un modo per avere un id del messaggio per implementare la politica at most once 
+
+
+-----------------------------------------------------------------------
+1. aggiustare il fatto che abbiamo 10 thread forse non ha senso ed è inefficiente (boh)
+2. Documentazione -> scrivere le scelte progettuali
+3. Rivedere il codice e togliere eventuali commenti di copilot

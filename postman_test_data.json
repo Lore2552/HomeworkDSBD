@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"mario.rossi@example.com\",\n  \"name\": \"Mario\",\n  \"surname\": \"Rossi\",\n  \"fiscal_code\": \"RSSMRA80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000000\"\n}",
+					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"mario.rossi@example.com\",\n  \"name\": \"Mario\",\n  \"surname\": \"Rossi\",\n  \"fiscal_code\": \"RSSMRA80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000000\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,7 +216,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"luigi.verdi@example.com\",\n  \"name\": \"Luigi\",\n  \"surname\": \"Verdi\",\n  \"fiscal_code\": \"VRDLGU80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000001\"\n}",
+					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"luigi.verdi@example.com\",\n  \"name\": \"Luigi\",\n  \"surname\": \"Verdi\",\n  \"fiscal_code\": \"VRDLGU80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000001\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -353,7 +353,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
+					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -403,6 +403,235 @@
 					"port": "5001",
 					"path": [
 						"register_airports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Cleanup (Giovanni)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/user_info/giovanni.bianchi@example.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"user_info",
+						"giovanni.bianchi@example.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Airport Interest (Mario - LIRF)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"mario.rossi@example.com\",\n  \"airport_code\": \"LIRF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/removeAirportInterest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"removeAirportInterest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Airport Removal (Mario)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/user_info/mario.rossi@example.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"user_info",
+						"mario.rossi@example.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Last Airport Interest (Mario - LIMC, should delete flights)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"mario.rossi@example.com\",\n  \"airport_code\": \"LIMC\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/removeAirportInterest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"removeAirportInterest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Shared Airport Interest (Giovanni - LIRF, should NOT delete flights)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"airport_code\": \"LIRF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/removeAirportInterest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"removeAirportInterest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User - Duplicate Message (should fail)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"message_id\": \"Usa lo stesso UUID generato dal primo 'Add User' per Mario - copia il valore dal body della risposta precedente\",\n  \"email\": \"mario.rossi@example.com\",\n  \"name\": \"Mario\",\n  \"surname\": \"Rossi\",\n  \"fiscal_code\": \"RSSMRA80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User (Franco - New User with different UUID)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"franco.neri@example.com\",\n  \"name\": \"Franco\",\n  \"surname\": \"Neri\",\n  \"fiscal_code\": \"NRFRNC80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000003\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Franco was added (At Most Once works)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"users"
 					]
 				}
 			},
