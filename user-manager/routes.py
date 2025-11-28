@@ -4,6 +4,7 @@ from models import User, MessageId
 import grpc
 import user_manager_pb2
 import user_manager_pb2_grpc
+from datetime import datetime,timedelta
 
 user_bp = Blueprint('user_api', __name__)
 
@@ -12,47 +13,67 @@ def add_user():
     data = request.json
     if not data:
         return {"error": "Invalid JSON"}, 400
+    
+    message_id = data.get("message_id")
+    if not message_id:
+        return {"error": "Message ID is required"}, 400
+
+    cached_msg = db.session.get(MessageId, message_id)
+    
+    if cached_msg:
+        print(f"Cache hit per message_id: {message_id}. Restituisco risposta salvata.")
+        return cached_msg.response_data, cached_msg.response_status
 
     email = data.get("email")
-    message_id = data.get("message_id")
-
     if not email:
         return {"error": "Email is required"}, 400
 
-    if not message_id:
-        return {"error": "Message ID (UUID) is required"}, 400
-
-    # Check if message has already been processed (at most once semantics)
-    existing_message = db.session.get(MessageId, message_id)
-    if existing_message:
-        return {"error": "Request already processed - user already registered"}, 409
+    response_body = {}
+    status_code = 200
 
     if db.session.get(User, email):
-        return {"error": "User already exists"}, 409
+        response_body = {"error": "User already exists"}
+        status_code = 409
+    else:
+        fiscal_code = data.get("fiscal_code")
+        cf_conflict = False
+        if fiscal_code:
+            existing_cf = User.query.filter_by(fiscal_code=fiscal_code).first()
+            if existing_cf:
+                response_body = {"error": "Fiscal code already used by another user"}
+                status_code = 409
+                cf_conflict = True
+        
+        if not cf_conflict:
+            user = User(
+                email=email,
+                name=data.get("name"),
+                surname=data.get("surname"),
+                fiscal_code=fiscal_code,
+                bank_info=data.get("bank_info"),
+            )
+            db.session.add(user)
+            response_body = {"message": "User created"}
+            status_code = 201
 
-    fiscal_code = data.get("fiscal_code")
-    if fiscal_code:
-        existing_cf = User.query.filter_by(fiscal_code=fiscal_code).first()
-        if existing_cf:
-            return {"error": "Fiscal code already used by another user"}, 409
+    try:
+        expiration_time = datetime.now() + timedelta(minutes=5)
+        
+        message_record = MessageId(
+            id=message_id,
+            response_data=response_body,   
+            response_status=status_code,  
+            expires_at=expiration_time
+        )
+        
+        db.session.add(message_record)
+        db.session.commit()
+        
+        return response_body, status_code
 
-    user = User(
-        email=email,
-        name=data.get("name"),
-        surname=data.get("surname"),
-        fiscal_code=fiscal_code,
-        bank_info=data.get("bank_info"),
-    )
-
-    # Save the message ID to ensure idempotency
-    message_record = MessageId(id=message_id)
-    
-    db.session.add(user)
-    db.session.add(message_record)
-    db.session.commit()
-
-    return {"message": "User created"}, 201
-
+    except Exception as e:
+        db.session.rollback()
+        return {"error": f"Internal Server Error: {str(e)}"}, 500
 
 @user_bp.route("/deleteUser", methods=["DELETE"])
 def delete_user():

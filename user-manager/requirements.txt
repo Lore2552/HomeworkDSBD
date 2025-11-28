@@ -4,3 +4,4 @@ sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 grpcio==1.60.0
 grpcio-tools==1.60.0
+apscheduler==3.10.4
