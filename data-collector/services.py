@@ -52,7 +52,7 @@ def collect_flights(target_airports=None):
     
     if token:
         headers = {"Authorization": f"Bearer {token}"}
-    # Time window: End 2 hours ago to ensure data availability (OpenSky delay)
+    # Time window: End 2 hours ago to ensure data availability
     # and cover the last 12 hours from that point.
     end_time = int(time.time()) - 7200 
     begin_time = end_time - (12 * 3600)
