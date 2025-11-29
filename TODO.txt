@@ -13,7 +13,7 @@ COSE DA AGGIUSTARE:
 
 1. (FATTO) Trikki aeroporto (vedi mess importante)
 2. (FATTO) ⁠At most once (vedi registrazione) 
-3. ⁠Documentazione
+3. (FATTO) ⁠Documentazione
 4. (FATTO) ⁠Un utente puo togliere gli interessi
 5. (FATTO) ⁠abbissare versioni in requirements.txt
 6. (FATTO) da controllare meglio la creazione del server grpc
@@ -33,10 +33,11 @@ COSE DA AGGIUSTARE:
 
 
 -----------------------------------------------------------------------
-1. aggiustare il fatto che abbiamo 10 thread forse non ha senso ed è inefficiente (boh)
-2. Rivedere il codice e togliere eventuali commenti di copilot
-3. Provare tutte le richieste API di postman per vedere se funziona tutto correttamnete, inoltre aggiustarlo un po' per il push finale
-4. Documentazione -> scrivere le scelte progettuali
-5. (FATTO) Aggiungere un cleanup della cache, nella documentazione argomentare il fatto che abbiamo una cache che contiene id delle 
+1. Aggiustare il fatto che abbiamo 10 thread forse non ha senso ed è inefficiente (boh)
+2. Rivedere il codice 
+-> 3. Togliere eventuali commenti di copilot
+4. Provare tutte le richieste API di postman per vedere se funziona tutto correttamnete, inoltre aggiustarlo un po' per il push finale
+-> 5. Documentazione 
+6. (FATTO) Aggiungere un cleanup della cache, nella documentazione argomentare il fatto che abbiamo una cache che contiene id delle 
 richieste UNIVOCI e che poi ogni tot (10/5 minuti) viene ELIMINATO quell'id della richiesta (per farlo aggiungi expire date) 
 (quindi fare un thread scheduler periodico) INOLTRE SALVARE LA RISPOSTA DEL MESSAGGIO PER EVITARE DI RIGENERARLO OGNI VOLTA 
