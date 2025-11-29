@@ -12,7 +12,7 @@ HO AGGIUNTO CHE SI ELIMINANO GLI INTERESSI QUANDO RIMUOVI UN UTENTE TESTALO
 COSE DA AGGIUSTARE:
 
 1. (FATTO) Trikki aeroporto (vedi mess importante)
-2. ⁠At most once (vedi registrazione) (FATTO)
+2. (FATTO) ⁠At most once (vedi registrazione) 
 3. ⁠Documentazione
 4. (FATTO) ⁠Un utente puo togliere gli interessi
 5. (FATTO) ⁠abbissare versioni in requirements.txt
