@@ -18,15 +18,15 @@ def add_user():
     if not message_id:
         return {"error": "Message ID is required"}, 400
 
+    email = data.get("email")
+    if not email:
+        return {"error": "Email is required"}, 400
+
     cached_msg = db.session.get(MessageId, message_id)
     
     if cached_msg:
         print(f"Cache hit per message_id: {message_id}. Restituisco risposta salvata.")
         return cached_msg.response_data, cached_msg.response_status
-
-    email = data.get("email")
-    if not email:
-        return {"error": "Email is required"}, 400
 
     response_body = {}
     status_code = 200
@@ -53,6 +53,7 @@ def add_user():
                 bank_info=data.get("bank_info"),
             )
             db.session.add(user)
+            db.session.commit()
             response_body = {"message": "User created"}
             status_code = 201
 
