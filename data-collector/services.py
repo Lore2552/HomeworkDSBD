@@ -28,7 +28,6 @@ def collect_flights(target_airports=None):
     if target_airports:
         airport_codes = target_airports
     else:
-        # Get unique airports
         try:
             airports = db.session.query(UserAirport.airport_code).distinct().all()
             airport_codes = [a[0] for a in airports]
@@ -40,7 +39,6 @@ def collect_flights(target_airports=None):
              return {"message": "No valid airports provided."}
         return {"message": "No airports to monitor found in DB."}
 
-    # Auth logic: Prefer Basic Auth if vars are set, else try Token
     auth = None
     headers = {}
     token = None
@@ -52,8 +50,6 @@ def collect_flights(target_airports=None):
     
     if token:
         headers = {"Authorization": f"Bearer {token}"}
-    # Time window: End 2 hours ago to ensure data availability
-    # and cover the last 12 hours from that point.
     end_time = int(time.time()) - 7200 
     begin_time = end_time - (12 * 3600)
 
@@ -82,7 +78,6 @@ def collect_flights(target_airports=None):
                     if exists:
                         continue
 
-                    # Avoid duplicates if needed, or just insert log-style
                     new_flight = Flight(
                         icao24=f.get('icao24'),
                         callsign=f.get('callsign', '').strip(),

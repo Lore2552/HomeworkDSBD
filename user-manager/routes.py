@@ -92,7 +92,6 @@ def delete_user():
     db.session.delete(user)
     db.session.commit()
 
-    # Notify Data Collector to clean up user data via gRPC
     try:
         with grpc.insecure_channel("data-collector:50052") as channel:
             stub = user_manager_pb2_grpc.CollectorServiceStub(channel)
@@ -116,7 +115,6 @@ def get_message_ids():
     return jsonify([msg.to_dict() for msg in message_ids]), 200
 '''
 
-
 @user_bp.route("/removeAirportInterest", methods=["DELETE"])
 def remove_airport_interest():
     data = request.json
@@ -134,7 +132,6 @@ def remove_airport_interest():
     if not user:
         return {"error": "User not found"}, 404
 
-    # Notify Data Collector to remove airport interest via gRPC
     try:
         with grpc.insecure_channel("data-collector:50052") as channel:
             stub = user_manager_pb2_grpc.CollectorServiceStub(channel)

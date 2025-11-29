@@ -43,6 +43,7 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     start_app_scheduler()
+    
     # Start gRPC server
     grpc_thread = threading.Thread(target=serve_grpc, args=(app,))
     grpc_thread.daemon = True

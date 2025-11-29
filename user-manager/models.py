@@ -22,7 +22,7 @@ class User(db.Model):
 class MessageId(db.Model):
     __tablename__ = "message_ids"
 
-    id = db.Column(db.String(36), primary_key=True)  # UUID format
+    id = db.Column(db.String(36), primary_key=True)  
     response_data = db.Column(db.JSON, nullable=True) 
     response_status = db.Column(db.Integer, nullable=True)
     expires_at = db.Column(db.DateTime, nullable=False)

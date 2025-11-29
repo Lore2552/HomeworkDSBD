@@ -11,10 +11,10 @@ class TokenManager:
         self._access_token = None
         self._expiry_ts = 0
         self._lock = threading.Lock()
-        # ssecondi
+        # secondi
         self._margin = 30
 
-    #metodo privato!
+
     def _request_new_token(self):
         payload = {
             "grant_type": "client_credentials",
@@ -49,5 +49,4 @@ CLIENT_ID = os.getenv("CLIENT_ID", "lore25-api-client")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET", "FozpkBoBcLEhsFcEZNh1ySEGmsb7bYbJ")
 TOKEN_URL = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token"
 
-# istanza globale
 token_manager = TokenManager(TOKEN_URL, CLIENT_ID, CLIENT_SECRET)
