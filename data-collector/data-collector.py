@@ -20,9 +20,7 @@ app.register_blueprint(api_bp)
 
 def run_scheduled_flights():
     with app.app_context():
-        print("Inizio raccolta voli schedulata...")
         collect_flights()
-        print("Raccolta voli completata.")
 
 if __name__ == "__main__":
     with app.app_context():

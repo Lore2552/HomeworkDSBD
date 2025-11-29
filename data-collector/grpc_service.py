@@ -84,6 +84,5 @@ def serve_grpc(app):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     user_manager_pb2_grpc.add_CollectorServiceServicer_to_server(CollectorService(app), server)
     server.add_insecure_port("[::]:50052")
-    print("gRPC server started on port 50052")
     server.start()
     server.wait_for_termination()

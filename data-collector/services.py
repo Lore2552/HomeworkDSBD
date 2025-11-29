@@ -21,7 +21,6 @@ def _flight_to_dict(flight):
     }
 
 def collect_flights(target_airports=None):
-    print("Starting flight collection cycle...")
     stats = {"airports_processed": 0, "flights_added": 0, "errors": []}
     
     airport_codes = []
@@ -53,19 +52,16 @@ def collect_flights(target_airports=None):
     end_time = int(time.time()) - 7200 
     begin_time = end_time - (12 * 3600)
 
-    print(f"Collecting flights from {begin_time} to {end_time}")
 
     for code in airport_codes:
         stats["airports_processed"] += 1
         # Arrivals
         try:
             url = f"https://opensky-network.org/api/flights/arrival?airport={code}&begin={begin_time}&end={end_time}"
-            print(f"Fetching arrivals for {code}: {url}")
             resp = requests.get(url, headers=headers, auth=auth)
             
             if resp.status_code == 200:
                 flights = resp.json()
-                print(f"Found {len(flights)} arrivals for {code}")
                 for f in flights:
                     # Check for duplicates
                     exists = Flight.query.filter_by(
@@ -94,22 +90,18 @@ def collect_flights(target_airports=None):
                 print(f"No arrivals found for {code} (404). This is normal if no flights occurred in the window.")
             else:
                 error_msg = f"Error fetching arrivals for {code}: {resp.status_code} {resp.text}"
-                print(error_msg)
                 stats["errors"].append(error_msg)
         except Exception as e:
             error_msg = f"Exception fetching arrivals for {code}: {e}"
-            print(error_msg)
             stats["errors"].append(error_msg)
 
         # Departures
         try:
             url = f"https://opensky-network.org/api/flights/departure?airport={code}&begin={begin_time}&end={end_time}"
-            print(f"Fetching departures for {code}: {url}")
             resp = requests.get(url, headers=headers, auth=auth)
             
             if resp.status_code == 200:
                 flights = resp.json()
-                print(f"Found {len(flights)} departures for {code}")
                 for f in flights:
                     # Check for duplicates
                     exists = Flight.query.filter_by(
@@ -138,19 +130,15 @@ def collect_flights(target_airports=None):
                 print(f"No departures found for {code} (404). This is normal if no flights occurred in the window.")
             else:
                 error_msg = f"Error fetching departures for {code}: {resp.status_code} {resp.text}"
-                print(error_msg)
                 stats["errors"].append(error_msg)
         except Exception as e:
             error_msg = f"Exception fetching departures for {code}: {e}"
-            print(error_msg)
             stats["errors"].append(error_msg)
         
     try:
         db.session.commit()
-        print("Flight collection cycle completed and saved to DB.")
     except Exception as e:
         error_msg = f"Error saving flights to DB: {e}"
-        print(error_msg)
         db.session.rollback()
         stats["errors"].append(error_msg)
     

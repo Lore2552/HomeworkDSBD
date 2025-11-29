@@ -19,16 +19,12 @@ db.init_app(app)
 app.register_blueprint(user_bp)
 
 def cleanup_expired_messages():
-    print(f"[{datetime.now()}] Esecuzione cleanup cache messaggi...")
     try:
         now = datetime.now()
         deleted_count = MessageId.query.filter(MessageId.expires_at < now).delete()
         db.session.commit()
-        if deleted_count > 0:
-            print(f"Cleanup completato: rimossi {deleted_count} messaggi scaduti.")
     except Exception as e:
         db.session.rollback()
-        print(f"Errore durante il cleanup: {e}")
 
 def start_app_scheduler():
     scheduler = BackgroundScheduler(daemon=True)
