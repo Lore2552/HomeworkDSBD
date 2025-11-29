@@ -66,7 +66,6 @@ def register_airports():
 
 @api_bp.route("/user_info/<email>", methods=["GET"])
 def get_user_info(email):
-    # 1. Get user details from User Manager via gRPC
     user_data = {}
     try:
         with grpc.insecure_channel("user-manager:50051") as channel:
@@ -86,17 +85,14 @@ def get_user_info(email):
     except grpc.RpcError as e:
         return {"error": f"gRPC error: {e.details()}"}, 500
 
-    # 2. Get airports from local DB
     user_airports = UserAirport.query.filter_by(user_email=email).all()
     airports_list = [ua.airport_code for ua in user_airports]
 
-    # 3. Combine and return
     result = {"user": user_data, "airports": airports_list}
 
     return jsonify(result), 200
 
-
-# usiamola solo per debug e poi eliminiamo questo endopoint quando consegniamo il progetto
+''' Useful for debugging 
 @api_bp.route("/get_token", methods=["GET"])
 def get_token_route():
     try:
@@ -104,9 +100,9 @@ def get_token_route():
         return jsonify({"access_token": token}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+'''
 
-
-# eliminiamo quando consegniamo il progetto, era una prova
+# test for token usage
 @api_bp.route("/states/all", methods=["GET"])
 def get_all_states():
     token = None
@@ -141,7 +137,7 @@ def get_flights():
 
 @api_bp.route("/airports/<airport_code>/last_flight", methods=["GET"])
 def get_last_flight(airport_code):
-    direction = request.args.get("direction")  # 'arrival', 'departure' or None for both
+    direction = request.args.get("direction")  
 
     response = {}
 
@@ -175,16 +171,12 @@ def get_average_flights(airport_code):
     except ValueError:
         return jsonify({"error": "Invalid days parameter"}), 400
 
-    direction = request.args.get(
-        "direction"
-    )  # 'arrival', 'departure' or None for total
+    direction = request.args.get("direction")  
 
     now = int(time.time())
     start_time = now - (days * 24 * 3600)
 
-    query = db.session.query(func.count(Flight.id)).filter(
-        Flight.airport_monitored == airport_code, Flight.first_seen >= start_time
-    )
+    query = db.session.query(func.count(Flight.id)).filter(Flight.airport_monitored == airport_code, Flight.first_seen >= start_time)
 
     if direction:
         query = query.filter(Flight.direction == direction)
@@ -209,17 +201,11 @@ def get_average_flights(airport_code):
 
 @api_bp.route("/airports/<airport_code>/busiest_hour", methods=["GET"])
 def get_busiest_hour(airport_code):
-    # Fetch all first_seen timestamps for the airport
-    flights = (
-        db.session.query(Flight.first_seen)
-        .filter_by(airport_monitored=airport_code)
-        .all()
-    )
+    flights = (db.session.query(Flight.first_seen).filter_by(airport_monitored=airport_code).all())
 
     if not flights:
         return jsonify({"message": "No flights found for this airport"}), 404
 
-    # Extract hour from timestamp (UTC)
     hours = [datetime.fromtimestamp(f[0], tz=timezone.utc).hour for f in flights]
 
     hour_counts = Counter(hours)
@@ -244,7 +230,6 @@ def get_busiest_hour(airport_code):
 
 @api_bp.route("/collect_flights", methods=["POST"])
 def trigger_collect_flights():
-    # Run synchronously for debugging purposes
     result = collect_flights()
     return jsonify(result), 200
 
