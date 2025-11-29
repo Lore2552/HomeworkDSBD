@@ -35,7 +35,7 @@ COSE DA AGGIUSTARE:
 -----------------------------------------------------------------------
 1. Aggiustare il fatto che abbiamo 10 thread forse non ha senso ed è inefficiente (boh)
 2. Rivedere il codice 
--> 3. Togliere eventuali commenti di copilot
+3. (FATTO) Togliere eventuali commenti di copilot
 4. Provare tutte le richieste API di postman per vedere se funziona tutto correttamnete, inoltre aggiustarlo un po' per il push finale
 -> 5. Documentazione 
 6. (FATTO) Aggiungere un cleanup della cache, nella documentazione argomentare il fatto che abbiamo una cache che contiene id delle 
