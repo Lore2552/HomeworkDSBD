@@ -22,7 +22,7 @@ def add_user():
     if not email:
         return {"error": "Email is required"}, 400
 
-    cached_msg = db.session.get(MessageId, message_id)
+    cached_msg = db.session.query(MessageId).filter_by(id=message_id).first()
     
     if cached_msg:
         print(f"Cache hit per message_id: {message_id}. Restituisco risposta salvata.")
@@ -31,42 +31,42 @@ def add_user():
     response_body = {}
     status_code = 200
 
-    if db.session.get(User, email):
-        response_body = {"error": "User already exists"}
-        status_code = 409
-    else:
-        fiscal_code = data.get("fiscal_code")
-        cf_conflict = False
-        if fiscal_code:
-            existing_cf = User.query.filter_by(fiscal_code=fiscal_code).first()
-            if existing_cf:
-                response_body = {"error": "Fiscal code already used by another user"}
-                status_code = 409
-                cf_conflict = True
-        
-        if not cf_conflict:
-            user = User(
-                email=email,
-                name=data.get("name"),
-                surname=data.get("surname"),
-                fiscal_code=fiscal_code,
-                bank_info=data.get("bank_info"),
-            )
-            db.session.add(user)
-            db.session.commit()
-            response_body = {"message": "User created"}
-            status_code = 201
-
     try:
-        expiration_time = datetime.now() + timedelta(minutes=5)
+        # Check if user already exists
+        existing_user = db.session.query(User).filter_by(email=email).first()
+        if existing_user:
+            response_body = {"error": "User already exists"}
+            status_code = 409
+        else:
+            fiscal_code = data.get("fiscal_code")
+            cf_conflict = False
+            if fiscal_code:
+                existing_cf = db.session.query(User).filter_by(fiscal_code=fiscal_code).first()
+                if existing_cf:
+                    response_body = {"error": "Fiscal code already used by another user"}
+                    status_code = 409
+                    cf_conflict = True
+            
+            if not cf_conflict:
+                user = User(
+                    email=email,
+                    name=data.get("name"),
+                    surname=data.get("surname"),
+                    fiscal_code=fiscal_code,
+                    bank_info=data.get("bank_info"),
+                )
+                db.session.add(user)
+                db.session.commit()
+                response_body = {"message": "User created"}
+                status_code = 201
         
+        expiration_time = datetime.now() + timedelta(minutes=5)
         message_record = MessageId(
             id=message_id,
             response_data=response_body,   
             response_status=status_code,  
             expires_at=expiration_time
         )
-        
         db.session.add(message_record)
         db.session.commit()
         
@@ -74,6 +74,7 @@ def add_user():
 
     except Exception as e:
         db.session.rollback()
+        print(f"Error in add_user: {str(e)}")
         return {"error": f"Internal Server Error: {str(e)}"}, 500
 
 @user_bp.route("/deleteUser", methods=["DELETE"])
