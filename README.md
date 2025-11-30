@@ -10,7 +10,7 @@ docker-compose up --build
 **Porte**: User Manager 5000 | Data Collector 5001 | PostgreSQL 5432
 
 ## File ENV
-Per testare le chiamate API, è necessaria l'aggiunta di un file .evn che contenga le credenziali generate dall'API: OPENSKY_CLIENT_ID = "", e OPENSKY_CLIENT_SECRET = "" 
+Per testare le chiamate API, è necessaria l'aggiunta di un file .env che contenga le credenziali generate dall'API: OPENSKY_CLIENT_ID = "", e OPENSKY_CLIENT_SECRET = "" 
 ## Testing (Postman)
 
 1. Import `postman_test_data.json` in Postman
