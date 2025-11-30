@@ -1,3 +1,5 @@
+## Description
+Homework1 del corso Distributed Systems and Big data svolto verso l'università degli studi di Catania.
 
 ## Quick Start
 
