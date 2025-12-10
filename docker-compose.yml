@@ -15,12 +15,14 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
+    restart: always
     ports:
       - "2181:2181"
 
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
+    restart: always
     ports:
       - "9092:9092"
     environment:
@@ -96,6 +98,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    restart: always
     ports:
       - "80:80"
     volumes:

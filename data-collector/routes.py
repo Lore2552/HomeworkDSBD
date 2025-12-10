@@ -131,6 +131,36 @@ def register_airports():
     }, status_code
 
 
+@api_bp.route("/airports/thresholds", methods=["DELETE"])
+def delete_airport_thresholds():
+    data = request.json
+    if not data:
+        return {"error": "Invalid JSON"}, 400
+
+    email = data.get("email")
+    airport_code = data.get("airport_code")
+
+    if not email or not airport_code:
+        return {"error": "Email and airport_code are required"}, 400
+
+    user_airport = UserAirport.query.filter_by(
+        user_email=email, airport_code=airport_code
+    ).first()
+
+    if not user_airport:
+        return {"error": "Airport interest not found"}, 404
+
+    user_airport.high_value = None
+    user_airport.low_value = None
+    
+    try:
+        db.session.commit()
+        return {"message": f"Thresholds removed for airport {airport_code}"}, 200
+    except Exception as e:
+        db.session.rollback()
+        return {"error": f"Database error: {str(e)}"}, 500
+
+
 @api_bp.route("/user_info/<email>", methods=["GET"])
 def get_user_info(email):
     user_data = {}

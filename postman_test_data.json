@@ -41,12 +41,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/addUser",
+					"raw": "http://localhost/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"addUser"
 					]
@@ -88,12 +87,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/addUser",
+					"raw": "http://localhost/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"addUser"
 					]
@@ -135,12 +133,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/addUser",
+					"raw": "http://localhost/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"addUser"
 					]
@@ -154,12 +151,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/users",
+					"raw": "http://localhost/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"users"
 					]
@@ -188,12 +184,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/deleteUser",
+					"raw": "http://localhost/deleteUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"deleteUser"
 					]
@@ -220,12 +215,11 @@
 					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/messageIds",
+					"raw": "http://localhost/messageIds",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"messageIds"
 					]
@@ -254,12 +248,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
 					]
@@ -282,12 +275,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
 					]
@@ -316,12 +308,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
 					]
@@ -335,12 +326,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/user_info/mario.rossi@example.com",
+					"raw": "http://localhost/user_info/mario.rossi@example.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"user_info",
 						"mario.rossi@example.com"
@@ -355,12 +345,11 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/collect_flights",
+					"raw": "http://localhost/collect_flights",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"collect_flights"
 					]
@@ -374,12 +363,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/flights",
+					"raw": "http://localhost/flights",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"flights"
 					]
@@ -393,12 +381,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/airports/LIRF/last_flight",
+					"raw": "http://localhost/airports/LIRF/last_flight",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"airports",
 						"LIRF",
@@ -414,12 +401,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/airports/LIRF/average_flights?days=7",
+					"raw": "http://localhost/airports/LIRF/average_flights?days=7",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"airports",
 						"LIRF",
@@ -441,12 +427,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/airports/LIRF/busiest_hour",
+					"raw": "http://localhost/airports/LIRF/busiest_hour",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"airports",
 						"LIRF",
@@ -477,12 +462,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/removeAirportInterest",
+					"raw": "http://localhost/removeAirportInterest",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"removeAirportInterest"
 					]
@@ -511,12 +495,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/removeAirportInterest",
+					"raw": "http://localhost/removeAirportInterest",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"removeAirportInterest"
 					]
@@ -548,7 +531,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"message_id\": \"{{uuid}}\",\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"name\": \"Lorenzo\",\n  \"surname\": \"Varsallona\",\n  \"fiscal_code\": \"VRSLNZ90A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
+					"raw": "{\n  \"message_id\": \"{{uuid}}\",\n  \"email\": \"varsallonalorenzo@gmail.com\",\n  \"name\": \"Lorenzo\",\n  \"surname\": \"Varsallona\",\n  \"fiscal_code\": \"VRSLNZ90A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -556,12 +539,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/addUser",
+					"raw": "http://localhost/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"addUser"
 					]
@@ -582,7 +564,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"airports\": [\"LIRF\"]\n}",
+					"raw": "{\n  \"email\": \"varsallonalorenzo@gmail.com\",\n  \"airports\": [\"LIRF\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -590,12 +572,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
 					]
@@ -616,7 +597,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"airports\": [\n    {\n      \"code\": \"LIRF\",\n      \"high_value\": 50,\n      \"low_value\": 5\n    }\n  ]\n}",
+					"raw": "{\n  \"email\": \"varsallonalorenzo@gmail.com\",\n  \"airports\": [\n    {\n      \"code\": \"LIRF\",\n      \"high_value\": 50,\n      \"low_value\": 5\n    }\n  ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -624,12 +605,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
 					]
@@ -669,12 +649,11 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/addUser",
+					"raw": "http://localhost/addUser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
 					"path": [
 						"addUser"
 					]
@@ -703,14 +682,47 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5001/register_airports",
+					"raw": "http://localhost/register_airports",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5001",
 					"path": [
 						"register_airports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Airport Thresholds",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"varsallonalorenzo@gmail.com\",\n  \"airport_code\": \"LIRF\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/airports/thresholds",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"airports",
+						"thresholds"
 					]
 				}
 			},

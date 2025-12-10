@@ -1,7 +1,7 @@
 import time
 import requests
 import json
-import pybreaker
+from circuit_breaker import CircuitBreaker, CircuitBreakerOpenException
 from kafka import KafkaProducer
 from flask import jsonify
 from database import db
@@ -9,7 +9,7 @@ from models import Flight, UserAirport
 from token_manager import token_manager
 
 # Circuit Breaker
-breaker = pybreaker.CircuitBreaker(fail_max=3, reset_timeout=60)
+breaker = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
 
 def get_kafka_producer():
     try:
@@ -67,14 +67,14 @@ def collect_flights(target_airports=None):
     if token:
         headers = {"Authorization": f"Bearer {token}"}
     #12 ORE
-    '''
     end_time = int(time.time()) - 7200 
     begin_time = end_time - (12 * 3600)
+    
     #8 ORE
     '''
     end_time = int(time.time()) - 7200 
     begin_time = end_time - (8 * 3600)
-
+    '''
 
 
     for code in airport_codes:
@@ -119,7 +119,7 @@ def collect_flights(target_airports=None):
             else:
                 error_msg = f"Error fetching arrivals for {code}: {resp.status_code} {resp.text}"
                 stats["errors"].append(error_msg)
-        except pybreaker.CircuitBreakerError:
+        except CircuitBreakerOpenException:
             stats["errors"].append(f"Circuit Breaker open for {code} (Arrivals)")
         except Exception as e:
             error_msg = f"Exception fetching arrivals for {code}: {e}"
@@ -163,7 +163,7 @@ def collect_flights(target_airports=None):
             else:
                 error_msg = f"Error fetching departures for {code}: {resp.status_code} {resp.text}"
                 stats["errors"].append(error_msg)
-        except pybreaker.CircuitBreakerError:
+        except CircuitBreakerOpenException:
             stats["errors"].append(f"Circuit Breaker open for {code} (Departures)")
         except Exception as e:
             error_msg = f"Exception fetching departures for {code}: {e}"
