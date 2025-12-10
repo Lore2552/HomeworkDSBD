@@ -6,6 +6,8 @@ class UserAirport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_email = db.Column(db.String(255), nullable=False)
     airport_code = db.Column(db.String(10), nullable=False)
+    high_value = db.Column(db.Integer, nullable=True)
+    low_value = db.Column(db.Integer, nullable=True)
 
 
 class Flight(db.Model):

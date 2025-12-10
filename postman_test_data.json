@@ -523,6 +523,198 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add User (Lorenzo)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"uuid\", crypto.randomUUID());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"message_id\": \"{{uuid}}\",\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"name\": \"Lorenzo\",\n  \"surname\": \"Varsallona\",\n  \"fiscal_code\": \"VRSLNZ90A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Airport (Lorenzo - Initial)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"airports\": [\"LIRF\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/register_airports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"register_airports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Airport (Lorenzo - With Values)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"varsallonalorenzzo@gmail.com\",\n  \"airports\": [\n    {\n      \"code\": \"LIRF\",\n      \"high_value\": 50,\n      \"low_value\": 5\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/register_airports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"register_airports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User (Paola)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"uuid\", crypto.randomUUID());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"message_id\": \"{{uuid}}\",\n  \"email\": \"paola.pappalardo@outlook.it\",\n  \"name\": \"Paola\",\n  \"surname\": \"Pappalardo\",\n  \"fiscal_code\": \"PPPLPA90A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000003\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/addUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Airport (Paola - No Values)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"paola.pappalardo@outlook.it\",\n  \"airports\": [\"LIRF\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/register_airports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"register_airports"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

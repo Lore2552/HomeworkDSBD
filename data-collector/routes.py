@@ -40,28 +40,95 @@ def register_airports():
         return {"error": f"gRPC error: {e.details()}"}, 500
 
     # Save airports to DataDB
-    for airport_code in airports:
+    airport_codes_for_collection = []
+    new_registrations = False
+    updates_performed = False
+
+    for airport_data in airports:
+        # Handle both string (old format) and dict (new format)
+        if isinstance(airport_data, str):
+            code = airport_data
+            high = None
+            low = None
+        elif isinstance(airport_data, dict):
+            code = airport_data.get("code")
+            high = airport_data.get("high_value")
+            low = airport_data.get("low_value")
+        else:
+            continue
+
+        if not code:
+            continue
+
+        # Validation: high > low if both present in request
+        if high is not None and low is not None:
+            if high <= low:
+                return {"error": f"For airport {code}, high-value must be greater than low-value"}, 400
+
+        airport_codes_for_collection.append(code)
+
         exists = UserAirport.query.filter_by(
-            user_email=email, airport_code=airport_code
+            user_email=email, airport_code=code
         ).first()
-        if not exists:
-            new_airport = UserAirport(user_email=email, airport_code=airport_code)
+
+        if exists:
+            # Update existing
+            current_high = exists.high_value
+            current_low = exists.low_value
+            
+            new_high = high if high is not None else current_high
+            new_low = low if low is not None else current_low
+
+            # Validate against existing/new values
+            if new_high is not None and new_low is not None:
+                if new_high <= new_low:
+                     return {"error": f"For airport {code}, update failed: high-value ({new_high}) must be greater than low-value ({new_low})"}, 400
+            
+            if high is not None: 
+                exists.high_value = high
+                updates_performed = True
+            if low is not None: 
+                exists.low_value = low
+                updates_performed = True
+        else:
+            new_registrations = True
+            new_airport = UserAirport(
+                user_email=email, 
+                airport_code=code,
+                high_value=high,
+                low_value=low
+            )
             db.session.add(new_airport)
 
     db.session.commit()
 
-    # Trigger immediate collection for these airports in background
-    app = current_app._get_current_object()
+    # Trigger immediate collection synchronously to return stats/errors
+    stats = collect_flights(target_airports=airport_codes_for_collection)
+    
+    has_errors = len(stats.get("errors", [])) > 0
+    
+    status_code = 200
+    message = "Airports processed successfully."
 
-    def async_collection(app_instance, codes):
-        with app_instance.app_context():
-            collect_flights(target_airports=codes)
-
-    threading.Thread(target=async_collection, args=(app, airports)).start()
+    if new_registrations:
+        if has_errors:
+            message = "Failed to collect data for new airport(s)."
+            status_code = 502 # Bad Gateway / Upstream Error
+        else:
+            message = "Airports registered successfully."
+            if updates_performed:
+                message = "Airports registered and preferences updated successfully."
+    elif updates_performed:
+        message = "Preferences updated successfully."
+        # We return 200 even if collection failed, as the preference update is persisted.
+    elif has_errors:
+        message = "Errors occurred during flight data collection."
+        status_code = 502
 
     return {
-        "message": "Airports registered successfully. Flight data collection started."
-    }, 200
+        "message": message,
+        "collection_stats": stats
+    }, status_code
 
 
 @api_bp.route("/user_info/<email>", methods=["GET"])
