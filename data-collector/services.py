@@ -2,7 +2,7 @@ import time
 import requests
 import json
 from circuit_breaker import CircuitBreaker, CircuitBreakerOpenException
-from kafka import KafkaProducer
+from confluent_kafka import Producer
 from flask import jsonify
 from database import db
 from models import Flight, UserAirport
@@ -13,10 +13,8 @@ breaker = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
 
 def get_kafka_producer():
     try:
-        return KafkaProducer(
-            bootstrap_servers=['kafka:9092'],
-            value_serializer=lambda v: json.dumps(v).encode('utf-8')
-        )
+        conf = {'bootstrap.servers': 'kafka:9092'}
+        return Producer(conf)
     except Exception as e:
         print(f"Failed to connect to Kafka: {e}")
         return None
@@ -187,7 +185,7 @@ def collect_flights(target_airports=None):
                 "timestamp": time.time(),
                 "airport_counts": airport_counts
             }
-            producer.send('to-alert-system', msg)
+            producer.produce('to-alert-system', json.dumps(msg).encode('utf-8'))
             producer.flush()
             print("Sent update to Kafka")
         except Exception as e:

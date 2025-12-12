@@ -45,8 +45,8 @@ class TokenManager:
             self._expiry_ts = expiry_ts
             return self._access_token
 
-CLIENT_ID = os.getenv("CLIENT_ID", "lore25-api-client")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET", "FozpkBoBcLEhsFcEZNh1ySEGmsb7bYbJ")
+CLIENT_ID = os.getenv("OPENSKY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("OPENSKY_CLIENT_SECRET")
 TOKEN_URL = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token"
 
 token_manager = TokenManager(TOKEN_URL, CLIENT_ID, CLIENT_SECRET)

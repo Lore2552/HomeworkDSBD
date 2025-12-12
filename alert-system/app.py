@@ -1,7 +1,7 @@
 import json
 import time
 import os
-from kafka import KafkaConsumer, KafkaProducer
+from confluent_kafka import Consumer, Producer, KafkaError
 from sqlalchemy import create_engine, text
 
 # Database connection
@@ -19,60 +19,96 @@ def get_user_preferences(airport_code):
         result = conn.execute(query, {"code": airport_code})
         return result.fetchall()
 
+def delivery_report(err, msg):
+    """Callback to verify production"""
+    if err:
+        print(f"Failed to produce to {msg.topic()}: {err}")
+    else:
+        print(f"Alert sent to {msg.topic()} at offset {msg.offset()}")
+
 def main():
     print("Starting Alert System...")
     
     # Wait for Kafka
     time.sleep(20) 
 
-    consumer = KafkaConsumer(
-        'to-alert-system',
-        bootstrap_servers=['kafka:9092'],
-        auto_offset_reset='earliest',
-        enable_auto_commit=True,
-        group_id='alert-system-group',
-        value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-    )
+    consumer_config = {
+        'bootstrap.servers': 'kafka:9092',
+        'group.id': 'alert-system-group',
+        'auto.offset.reset': 'earliest',
+        'enable.auto.commit': False
+    }
 
-    producer = KafkaProducer(
-        bootstrap_servers=['kafka:9092'],
-        value_serializer=lambda v: json.dumps(v).encode('utf-8')
-    )
+    producer_config = {
+        'bootstrap.servers': 'kafka:9092'
+    }
 
+    consumer = Consumer(consumer_config)
+    producer = Producer(producer_config)
+
+    consumer.subscribe(['to-alert-system'])
     print("Listening on to-alert-system...")
 
-    for message in consumer:
-        data = message.value
-        print(f"Received message: {data}")
-        
-        if data.get("type") == "update_completed":
-            airport_counts = data.get("airport_counts", {})
+    try:
+        while True:
+            msg = consumer.poll(1.0)
+
+            if msg is None:
+                continue
             
-            for airport, count in airport_counts.items():
-                preferences = get_user_preferences(airport)
+            if msg.error():
+                if msg.error().code() == KafkaError._PARTITION_EOF:
+                    continue
+                else:
+                    print(f"Consumer error: {msg.error()}")
+                    continue
+
+            try:
+                data = json.loads(msg.value().decode('utf-8'))
+                print(f"Received message: {data}")
                 
-                for pref in preferences:
-                    email = pref[0]
-                    high = pref[1]
-                    low = pref[2]
+                if data.get("type") == "update_completed":
+                    airport_counts = data.get("airport_counts", {})
                     
-                    condition = None
-                    if high is not None and count >= high:
-                        condition = f"Flight count {count} >= High Threshold {high}"
-                    elif low is not None and count <= low:
-                        condition = f"Flight count {count} <= Low Threshold {low}"
-                    
-                    if condition:
-                        alert_msg = {
-                            "email": email,
-                            "airport": airport,
-                            "condition": condition,
-                            "count": count
-                        }
-                        producer.send('to-notifier', alert_msg)
-                        print(f"Alert sent for {email} regarding {airport}: {condition}")
+                    for airport, count in airport_counts.items():
+                        preferences = get_user_preferences(airport)
                         
-            producer.flush()
+                        for pref in preferences:
+                            email = pref[0]
+                            high = pref[1]
+                            low = pref[2]
+                            
+                            condition = None
+                            if high is not None and count >= high:
+                                condition = f"Flight count {count} >= High Threshold {high}"
+                            elif low is not None and count <= low:
+                                condition = f"Flight count {count} <= Low Threshold {low}"
+                            
+                            if condition:
+                                alert_msg = {
+                                    "email": email,
+                                    "airport": airport,
+                                    "condition": condition,
+                                    "count": count
+                                }
+                                producer.produce(
+                                    'to-notifier', 
+                                    json.dumps(alert_msg).encode('utf-8'),
+                                    callback=delivery_report
+                                )
+                                producer.poll(0)
+                                print(f"Alert queued for {email} regarding {airport}: {condition}")
+                    
+                    producer.flush()
+                    consumer.commit(asynchronous=False)
+                    
+            except Exception as e:
+                print(f"Error processing message: {e}")
+
+    except KeyboardInterrupt:
+        print("Interrupted by user")
+    finally:
+        consumer.close()
 
 if __name__ == "__main__":
     main()

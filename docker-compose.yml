@@ -12,25 +12,27 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
-    restart: always
-    ports:
-      - "2181:2181"
-
   kafka:
-    image: wurstmeister/kafka
+    image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
     restart: always
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "to-alert-system:1:1,to-notifier:1:1"
-    depends_on:
-      - zookeeper
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:9093'
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
 
   user-manager:
     build:
@@ -63,6 +65,8 @@ services:
       - kafka
     environment:
       DATABASE_URL: postgresql://user:password@postgres:5432/datadb
+      OPENSKY_CLIENT_ID: ${OPENSKY_CLIENT_ID}
+      OPENSKY_CLIENT_SECRET: ${OPENSKY_CLIENT_SECRET}
     volumes:
       - ./data-collector:/app
       - ./protos:/app/protos
@@ -92,6 +96,7 @@ services:
       - kafka
     environment:
       PYTHONUNBUFFERED: 1
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
     volumes:
       - ./alert-notifier-system:/app
 
