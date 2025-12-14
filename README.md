@@ -11,7 +11,6 @@ docker-compose up --build
 
 ## File ENV
 Per testare le chiamate API, è necessaria l'aggiunta di un file .env che contenga le credenziali generate dall'API: OPENSKY_CLIENT_ID = "", e OPENSKY_CLIENT_SECRET = ""
-Per testare le email SMTP è necessario aggiornare la password dell'applicazione: SMTP_PASSWORD = ""
 ## Testing (Postman)
 
 1. Import `postman_test_data.json` in Postman
