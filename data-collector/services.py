@@ -13,7 +13,13 @@ breaker = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
 
 def get_kafka_producer():
     try:
-        conf = {'bootstrap.servers': 'kafka:9092'}
+        conf = {
+            'bootstrap.servers': 'kafka:9092',
+            'acks': 'all',
+            'retries': 5,
+            'batch.size': 32768,
+            'linger.ms': 20
+        }
         return Producer(conf)
     except Exception as e:
         print(f"Failed to connect to Kafka: {e}")

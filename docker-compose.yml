@@ -40,9 +40,9 @@ services:
       dockerfile: user-manager/Dockerfile
     container_name: user-manager
     restart: always
-    ports:
-      - "5000:5000"
-      - "50051:50051"
+    expose:
+      - "5000"
+      - "50051"
     depends_on:
       - postgres
     environment:
@@ -57,9 +57,9 @@ services:
       dockerfile: data-collector/Dockerfile
     container_name: data-collector
     restart: always
-    ports:
-      - "5001:5001"
-      - "50052:50052"
+    expose:
+      - "5001"
+      - "50052"
     depends_on:
       - postgres
       - kafka

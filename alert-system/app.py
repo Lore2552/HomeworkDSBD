@@ -39,7 +39,11 @@ def main():
     }
 
     producer_config = {
-        'bootstrap.servers': 'kafka:9092'
+        'bootstrap.servers': 'kafka:9092',
+        'acks': 'all',
+        'retries': 5,
+        'batch.size': 32768,
+        'linger.ms': 20
     }
 
     consumer = Consumer(consumer_config)

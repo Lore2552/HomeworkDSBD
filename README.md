@@ -22,7 +22,8 @@ docker-compose up --build
 | GET | `/users` | 5000 | - |
 | DELETE | `/deleteUser` | 5000 | `{email}` |
 | DELETE | `/removeAirportInterest` | 5000 | `{email, airport_code}` |
-| POST | `/register_airports` | 5001 | `{email, airports: []}` |
+| POST | `/register_airports` | 5001 | `{email, airports: [{code, high_value, low_value}]}` |
+| DELETE | `/airports/deleteThresholds` | 5001 | `{email, airport_code}` |
 | GET | `/user_info/<email>` | 5001 | - |
 | GET | `/airports/<code>/last_flight` | 5001 | - |
 | GET | `/airports/<code>/average_flights?days=7` | 5001 | - |

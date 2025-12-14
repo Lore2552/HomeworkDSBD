@@ -5,7 +5,7 @@ class CircuitBreakerOpenException(Exception):
     pass
 
 class CircuitBreaker:
-    def __init__(self, failure_threshold=5, recovery_timeout=30, expected_exception=Exception):
+    def __init__(self, failure_threshold=3, recovery_timeout=60, expected_exception=Exception):
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
         self.expected_exception = expected_exception
