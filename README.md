@@ -1,5 +1,5 @@
 ## Description
-Homework1 del corso Distributed Systems and Big data svolto verso l'università degli studi di Catania.
+Homework2 del corso Distributed Systems and Big data svolto verso l'università degli studi di Catania.
 
 ## Quick Start
 
@@ -8,7 +8,9 @@ docker-compose up --build
 ```
 
 **Porte**: User Manager 5000 | Data Collector 5001 | PostgreSQL 5432
-
+## File ENV
+Per testare le chiamate API, è necessaria l'aggiunta di un file .env che contenga le credenziali generate dall'API: OPENSKY_CLIENT_ID = "", e OPENSKY_CLIENT_SECRET = ""
+Anche per le email SMTP va compilato il campo: SMTP_PASSWORD = ""
 ## Testing (Postman)
 
 1. Import `postman_test_data.json` in Postman
@@ -29,34 +31,6 @@ docker-compose up --build
 | GET | `/airports/<code>/average_flights?days=7` | 5001 | - |
 | GET | `/airports/<code>/busiest_hour` | 5001 | - |
 
-## Testing rapido (curl)
-
-```bash
-# Aggiungi utente
-curl -X POST http://localhost:5000/addUser \
-  -H "Content-Type: application/json" \
-  -d '{"message_id":"1","email":"test@example.com","name":"Test","surname":"User","fiscal_code":"ABC123","bank_info":"IT123"}'
-
-# Leggi utenti
-curl http://localhost:5000/users
-
-# Registra aeroporti
-curl -X POST http://localhost:5001/register_airports \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","airports":["LIRF","LIMC"]}'
-
-# Info utente
-curl http://localhost:5001/user_info/test@example.com
-
-# Ultimi voli
-curl http://localhost:5001/airports/LIRF/last_flight
-
-# Media voli
-curl "http://localhost:5001/airports/LIRF/average_flights?days=7"
-
-# Ora più trafficata
-curl http://localhost:5001/airports/LIRF/busiest_hour
-```
 
 ## Arresto
 
