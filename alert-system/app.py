@@ -4,12 +4,11 @@ import os
 from confluent_kafka import Consumer, Producer, KafkaError
 from sqlalchemy import create_engine, text
 
-# Database connection
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://user:password@postgres:5432/datadb")
 engine = create_engine(DATABASE_URL)
 
 def get_user_preferences(airport_code):
-    # Query datadb for users interested in this airport with thresholds
+    
     query = text("""
         SELECT user_email, high_value, low_value 
         FROM user_airports 
@@ -29,7 +28,7 @@ def delivery_report(err, msg):
 def main():
     print("Starting Alert System...")
     
-    # Wait for Kafka
+    # sleep per kafka (dettagliare nella documentazione)
     time.sleep(20) 
 
     consumer_config = {

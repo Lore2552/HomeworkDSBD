@@ -6,22 +6,22 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from confluent_kafka import Consumer, KafkaError
 
-# Gmail SMTP Configuration
+# Gmail SMTP configurazione
 SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 465  # SSL port
+SMTP_PORT = 465  # porta SSL
 SMTP_USER = "ppp.paolapappalardo@gmail.com"
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")  # password per app
 
 def send_email(to_email, subject, body):
     try:
-        # Create message
+        # creazione mess
         msg = MIMEMultipart()
         msg['From'] = SMTP_USER
         msg['To'] = to_email
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain'))
 
-        # Connect with SSL
+        # connessione con ssl
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
             server.login(SMTP_USER, SMTP_PASSWORD)
             server.sendmail(SMTP_USER, to_email, msg.as_string())
@@ -34,7 +34,7 @@ def send_email(to_email, subject, body):
 def main():
     print("Starting Alert Notifier System...")
     
-    # Wait for Kafka
+    # sleep per kafka (dettagliare nella documentazione)
     time.sleep(20)
 
     consumer_config = {

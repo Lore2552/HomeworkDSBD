@@ -102,7 +102,6 @@ def register_airports():
 
     db.session.commit()
 
-    # Trigger immediate collection synchronously to return stats/errors
     stats = collect_flights(target_airports=airport_codes_for_collection)
     
     has_errors = len(stats.get("errors", [])) > 0
@@ -113,14 +112,13 @@ def register_airports():
     if new_registrations:
         if has_errors:
             message = "Failed to collect data for new airport(s)."
-            status_code = 502 # Bad Gateway / Upstream Error
+            status_code = 502 
         else:
             message = "Airports registered successfully."
             if updates_performed:
                 message = "Airports registered and preferences updated successfully."
     elif updates_performed:
         message = "Preferences updated successfully."
-        # We return 200 even if collection failed, as the preference update is persisted.
     elif has_errors:
         message = "Errors occurred during flight data collection."
         status_code = 502
