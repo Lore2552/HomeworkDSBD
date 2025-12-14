@@ -715,14 +715,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/airports/thresholds",
+					"raw": "http://localhost/airports/deleteThresholds",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"airports",
-						"thresholds"
+						"deleteThresholds"
 					]
 				}
 			},

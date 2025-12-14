@@ -129,7 +129,7 @@ def register_airports():
     }, status_code
 
 
-@api_bp.route("/airports/thresholds", methods=["DELETE"])
+@api_bp.route("/airports/deleteThresholds", methods=["DELETE"])
 def delete_airport_thresholds():
     data = request.json
     if not data:
