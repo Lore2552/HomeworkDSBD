@@ -552,7 +552,7 @@
 			"response": []
 		},
 		{
-			"name": "Register Airport (Lorenzo - Initial)",
+			"name": "Register Airport (Lorenzo - No Values)",
 			"request": {
 				"method": "POST",
 				"header": [
