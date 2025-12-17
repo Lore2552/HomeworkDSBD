@@ -108,7 +108,7 @@ def collect_flights(target_airports=None):
 
                     new_flight = Flight(
                         icao24=f.get('icao24'),
-                        callsign=f.get('callsign', '').strip(),
+                        callsign=(f.get('callsign') or '').strip(),
                         est_departure_airport=f.get('estDepartureAirport'),
                         est_arrival_airport=f.get('estArrivalAirport'),
                         first_seen=f.get('firstSeen'),
@@ -152,7 +152,7 @@ def collect_flights(target_airports=None):
 
                     new_flight = Flight(
                         icao24=f.get('icao24'),
-                        callsign=f.get('callsign', '').strip(),
+                        callsign=(f.get('callsign') or '').strip(),
                         est_departure_airport=f.get('estDepartureAirport'),
                         est_arrival_airport=f.get('estArrivalAirport'),
                         first_seen=f.get('firstSeen'),

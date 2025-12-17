@@ -41,8 +41,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/addUser",
-					"protocol": "http",
+					"raw": "https://localhost/addUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -87,8 +87,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/addUser",
-					"protocol": "http",
+					"raw": "https://localhost/addUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -133,8 +133,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/addUser",
-					"protocol": "http",
+					"raw": "https://localhost/addUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -151,8 +151,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/users",
-					"protocol": "http",
+					"raw": "https://localhost/users",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -184,8 +184,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/deleteUser",
-					"protocol": "http",
+					"raw": "https://localhost/deleteUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -215,8 +215,8 @@
 					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost/messageIds",
-					"protocol": "http",
+					"raw": "https://localhost/messageIds",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -248,8 +248,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -275,8 +275,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -308,8 +308,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -326,8 +326,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/user_info/mario.rossi@example.com",
-					"protocol": "http",
+					"raw": "https://localhost/user_info/mario.rossi@example.com",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -345,8 +345,8 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/collect_flights",
-					"protocol": "http",
+					"raw": "https://localhost/collect_flights",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -363,8 +363,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/flights",
-					"protocol": "http",
+					"raw": "https://localhost/flights",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -381,8 +381,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/airports/LIRF/last_flight",
-					"protocol": "http",
+					"raw": "https://localhost/airports/LIRF/last_flight",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -401,8 +401,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/airports/LIRF/average_flights?days=7",
-					"protocol": "http",
+					"raw": "https://localhost/airports/LIRF/average_flights?days=7",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -427,8 +427,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/airports/LIRF/busiest_hour",
-					"protocol": "http",
+					"raw": "https://localhost/airports/LIRF/busiest_hour",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -462,8 +462,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/removeAirportInterest",
-					"protocol": "http",
+					"raw": "https://localhost/removeAirportInterest",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -495,8 +495,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/removeAirportInterest",
-					"protocol": "http",
+					"raw": "https://localhost/removeAirportInterest",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -539,8 +539,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/addUser",
-					"protocol": "http",
+					"raw": "https://localhost/addUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -572,8 +572,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -605,8 +605,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -649,8 +649,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/addUser",
-					"protocol": "http",
+					"raw": "https://localhost/addUser",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -682,8 +682,8 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/register_airports",
-					"protocol": "http",
+					"raw": "https://localhost/register_airports",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -715,14 +715,50 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/airports/deleteThresholds",
-					"protocol": "http",
+					"raw": "https://localhost/airports/deleteThresholds",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"airports",
 						"deleteThresholds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check HTTPS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost/check_https",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"check_https"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check HTTP Redirect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/check_https",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"check_https"
 					]
 				}
 			},
