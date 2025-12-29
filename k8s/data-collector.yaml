@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-collector
+  template:
+    metadata:
+      labels:
+        app: data-collector
+    spec:
+      containers:
+      - name: data-collector
+        image: data-collector:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001
+        - containerPort: 50052
+        - containerPort: 8001
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://user:password@postgres:5432/datadb"
+        # Assicurati di passare queste variabili tramite Secret in produzione
+        - name: OPENSKY_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: OPENSKY_CLIENT_ID
+              optional: true
+        - name: OPENSKY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: OPENSKY_CLIENT_SECRET
+              optional: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-collector
+spec:
+  selector:
+    app: data-collector
+  ports:
+    - name: http
+      port: 5001
+      targetPort: 5001
+    - name: grpc
+      port: 50052
+      targetPort: 50052
+    - name: metrics
+      port: 8001
+      targetPort: 8001

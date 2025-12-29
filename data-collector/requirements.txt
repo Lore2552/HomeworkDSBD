@@ -8,3 +8,4 @@ sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 apscheduler==3.10.4
 confluent-kafka==2.3.0
+prometheus-client

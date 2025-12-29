@@ -40,6 +40,8 @@ services:
       dockerfile: user-manager/Dockerfile
     container_name: user-manager
     restart: always
+    ports:
+      - "8000:8000"
     expose:
       - "5000"
       - "50051"
@@ -57,6 +59,8 @@ services:
       dockerfile: data-collector/Dockerfile
     container_name: data-collector
     restart: always
+    ports:
+      - "8001:8001"
     expose:
       - "5001"
       - "50052"
@@ -99,6 +103,18 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
     volumes:
       - ./alert-notifier-system:/app
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=/prometheus/'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: always
 
   nginx:
     image: nginx:latest

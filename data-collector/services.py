@@ -7,6 +7,7 @@ from flask import jsonify
 from database import db
 from models import Flight, UserAirport
 from token_manager import token_manager
+from metrics import FLIGHT_COLLECTION_DURATION, FLIGHTS_COLLECTED_TOTAL, COLLECTION_ERRORS_TOTAL, HOSTNAME, SERVICE_NAME
 
 # Circuit Breaker
 breaker = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
@@ -41,6 +42,7 @@ def _flight_to_dict(flight):
     }
 
 def collect_flights(target_airports=None):
+    start_time = time.time()
     stats = {"airports_processed": 0, "flights_added": 0, "errors": []}
     airport_counts = {} # Store counts for Kafka
     
@@ -52,6 +54,7 @@ def collect_flights(target_airports=None):
             airports = db.session.query(UserAirport.airport_code).distinct().all()
             airport_codes = [a[0] for a in airports]
         except Exception as e:
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="db_query_error").inc()
             return {"error": f"Error querying airports: {e}"}
 
     if not airport_codes:
@@ -66,6 +69,7 @@ def collect_flights(target_airports=None):
     try:
         token = token_manager.get_token()
     except Exception as e:
+        COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="token_error").inc()
         return {"error": f"Failed to get token: {e}"}
     
     if token:
@@ -123,11 +127,14 @@ def collect_flights(target_airports=None):
             else:
                 error_msg = f"Error fetching arrivals for {code}: {resp.status_code} {resp.text}"
                 stats["errors"].append(error_msg)
+                COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="api_error").inc()
         except CircuitBreakerOpenException:
             stats["errors"].append(f"Circuit Breaker open for {code} (Arrivals)")
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="circuit_breaker_open").inc()
         except Exception as e:
             error_msg = f"Exception fetching arrivals for {code}: {e}"
             stats["errors"].append(error_msg)
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="request_exception").inc()
 
         # Departures
         try:
@@ -167,11 +174,14 @@ def collect_flights(target_airports=None):
             else:
                 error_msg = f"Error fetching departures for {code}: {resp.status_code} {resp.text}"
                 stats["errors"].append(error_msg)
+                COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="api_error").inc()
         except CircuitBreakerOpenException:
             stats["errors"].append(f"Circuit Breaker open for {code} (Departures)")
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="circuit_breaker_open").inc()
         except Exception as e:
             error_msg = f"Exception fetching departures for {code}: {e}"
             stats["errors"].append(error_msg)
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="request_exception").inc()
         
         airport_counts[code] = current_airport_count
 
@@ -181,6 +191,7 @@ def collect_flights(target_airports=None):
         error_msg = f"Error saving flights to DB: {e}"
         db.session.rollback()
         stats["errors"].append(error_msg)
+        COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="db_commit_error").inc()
     
     # Send to Kafka
     producer = get_kafka_producer()
@@ -197,6 +208,13 @@ def collect_flights(target_airports=None):
         except Exception as e:
             print(f"Error sending to Kafka: {e}")
             stats["errors"].append(f"Kafka Error: {e}")
+            COLLECTION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="kafka_error").inc()
     
     print(f"Collection Stats: {stats}")
+    
+    # Update Prometheus Metrics
+    duration = time.time() - start_time
+    FLIGHT_COLLECTION_DURATION.labels(service=SERVICE_NAME, node=HOSTNAME).set(duration)
+    FLIGHTS_COLLECTED_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME).inc(stats["flights_added"])
+    
     return stats

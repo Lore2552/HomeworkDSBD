@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'codelab-monitor'
+
+scrape_configs:
+  - job_name: 'user-manager'
+    static_configs:
+      - targets: ['user-manager:8000']
+
+  - job_name: 'data-collector'
+    static_configs:
+      - targets: ['data-collector:8001']

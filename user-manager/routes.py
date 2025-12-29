@@ -5,6 +5,7 @@ import grpc
 import user_manager_pb2
 import user_manager_pb2_grpc
 from datetime import datetime,timedelta
+from metrics import USER_REGISTRATION_ERRORS_TOTAL, HOSTNAME, SERVICE_NAME
 
 user_bp = Blueprint('user_api', __name__)
 
@@ -32,6 +33,7 @@ def add_user():
         if existing_user:
             response_body = {"error": "User already exists"}
             status_code = 409
+            USER_REGISTRATION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="user_exists").inc()
         else:
             fiscal_code = data.get("fiscal_code")
             existing_cf = None
@@ -41,6 +43,7 @@ def add_user():
             if existing_cf:
                 response_body = {"error": "Fiscal code already used by another user"}
                 status_code = 409
+                USER_REGISTRATION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="fiscal_code_exists").inc()
             else:
                 # CREO UTENTE
                 user = User(
@@ -69,6 +72,7 @@ def add_user():
     
     except Exception as e:
         db.session.rollback()
+        USER_REGISTRATION_ERRORS_TOTAL.labels(service=SERVICE_NAME, node=HOSTNAME, error_type="internal_server_error").inc()
         return {"error": f"Internal Server Error: {str(e)}"}, 500
 
 @user_bp.route("/deleteUser", methods=["DELETE"])

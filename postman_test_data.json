@@ -41,14 +41,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/addUser",
+					"raw": "https://localhost:30443/addUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"addUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -87,14 +88,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/addUser",
+					"raw": "https://localhost:30443/addUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"addUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -133,14 +135,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/addUser",
+					"raw": "https://localhost:30443/addUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"addUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -151,14 +154,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/users",
+					"raw": "https://localhost:30443/users",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"users"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -184,14 +188,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/deleteUser",
+					"raw": "https://localhost:30443/deleteUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"deleteUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -215,14 +220,15 @@
 					"raw": "{\n  \"message_id\": \"{{$uuid}}\",\n  \"email\": \"giovanni.bianchi@example.com\",\n  \"name\": \"Giovanni\",\n  \"surname\": \"Bianchi\",\n  \"fiscal_code\": \"BNCGNN80A01H501Z\",\n  \"bank_info\": \"IT000000000000000000000002\"\n}"
 				},
 				"url": {
-					"raw": "https://localhost/messageIds",
+					"raw": "https://localhost:30443/messageIds",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"messageIds"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -248,14 +254,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -275,14 +282,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -308,14 +316,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -326,7 +335,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/user_info/mario.rossi@example.com",
+					"raw": "https://localhost:30443/user_info/mario.rossi@example.com",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -334,7 +343,8 @@
 					"path": [
 						"user_info",
 						"mario.rossi@example.com"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -345,14 +355,15 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/collect_flights",
+					"raw": "https://localhost:30443/collect_flights",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"collect_flights"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -363,14 +374,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/flights",
+					"raw": "https://localhost:30443/flights",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"flights"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -381,7 +393,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/airports/LIRF/last_flight",
+					"raw": "https://localhost:30443/airports/LIRF/last_flight",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -390,7 +402,8 @@
 						"airports",
 						"LIRF",
 						"last_flight"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -401,7 +414,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/airports/LIRF/average_flights?days=7",
+					"raw": "https://localhost:30443/airports/LIRF/average_flights?days=7",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -416,7 +429,8 @@
 							"key": "days",
 							"value": "7"
 						}
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -427,7 +441,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/airports/LIRF/busiest_hour",
+					"raw": "https://localhost:30443/airports/LIRF/busiest_hour",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -436,7 +450,8 @@
 						"airports",
 						"LIRF",
 						"busiest_hour"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -462,14 +477,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/removeAirportInterest",
+					"raw": "https://localhost:30443/removeAirportInterest",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"removeAirportInterest"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -495,14 +511,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/removeAirportInterest",
+					"raw": "https://localhost:30443/removeAirportInterest",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"removeAirportInterest"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -539,14 +556,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/addUser",
+					"raw": "https://localhost:30443/addUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"addUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -572,14 +590,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -605,14 +624,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -649,14 +669,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/addUser",
+					"raw": "https://localhost:30443/addUser",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"addUser"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -682,14 +703,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/register_airports",
+					"raw": "https://localhost:30443/register_airports",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"register_airports"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -715,7 +737,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost/airports/deleteThresholds",
+					"raw": "https://localhost:30443/airports/deleteThresholds",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -723,7 +745,8 @@
 					"path": [
 						"airports",
 						"deleteThresholds"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -734,14 +757,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost/check_https",
+					"raw": "https://localhost:30443/check_https",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"check_https"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
@@ -752,14 +776,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/check_https",
-					"protocol": "http",
+					"raw": "https://localhost:30443/check_https",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"check_https"
-					]
+					],
+					"port": "30443"
 				}
 			},
 			"response": []
