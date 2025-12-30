@@ -23,7 +23,6 @@ spec:
         env:
         - name: DATABASE_URL
           value: "postgresql://user:password@postgres:5432/datadb"
-        # Assicurati di passare queste variabili tramite Secret in produzione
         - name: OPENSKY_CLIENT_ID
           valueFrom:
             secretKeyRef:
