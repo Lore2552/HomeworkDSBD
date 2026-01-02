@@ -12,8 +12,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from prometheus_client import start_http_server
 from metrics import HOSTNAME, SERVICE_NAME, CLEANUP_DURATION, MESSAGES_CLEANED_TOTAL
 
-# Prometheus Metrics are now in metrics.py
-
 app = Flask(__name__)
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@postgres:5432/userdb")
